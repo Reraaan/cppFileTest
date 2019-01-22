@@ -108,7 +108,13 @@ class MyTest(unittest.TestCase):#继承unittest.TestCase
     @classmethod
     def tearDownClass(self):
         #每个测试用例执行之后做操作
-        os.remove(self.execPath)
+        _system = platform.system()
+        if (_system == "Windows"):
+            os.remove(self.execPath)
+        else:
+            index = self.execPath.index(".")
+            self.execPath = self.execPath[0:index]
+            os.remove(self.execPath)
         #os.remove(self.execcasePath)
         
         
@@ -154,7 +160,7 @@ class MyTest(unittest.TestCase):#继承unittest.TestCase
     def test_04(self):
         self.outputCase04 = Script.c_output(self.execPath,self.test_case04)
         #print(self.outputCase04)
-        #self.expectCase04 = Script.c_output(self.execcasePath,self.test_case04)
+        self.expectCase04 = Script.c_output(self.execcasePath,self.test_case04)
         self.assertEqual(self.outputCase04,self.expectCase04)
 
     def test_05(self):
@@ -167,7 +173,7 @@ if __name__ == '__main__':
     test_suite = unittest.TestSuite()#创建一个测试集合
     #test_suite.addTest(MyTest('test_01'))#测试套件中添加测试用例
     test_suite.addTest(unittest.makeSuite(MyTest))#使用makeSuite方法添加所有的测试方法
-    with open(os.path.abspath('.')+'\\report\\res.html','wb') as f:#打开一个保存结果的html文件
+    with open(os.path.abspath('.')+'/report/res.html','wb') as f:#打开一个保存结果的html文件
         runner = HTMLTestRunner.HTMLTestRunner(stream=f,title='cpp单文件测试',description='测试情况')
         #生成执行用例的对象
         runner.run(test_suite)
