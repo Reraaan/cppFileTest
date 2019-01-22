@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: UTF-8 -*-
+
 import HTMLTestRunner
 import unittest
 import os
@@ -129,8 +132,6 @@ class MyTest(unittest.TestCase):#继承unittest.TestCase
         assertIn(a, b)     a in b    
         assertNotIn(a, b)     a not in b
         """
-
-
 
     def test_01(self):
         self.outputCase01 = Script.c_output(self.execPath,self.test_case01)
