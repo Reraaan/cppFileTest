@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+﻿#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
 import HTMLTestRunner
@@ -25,8 +25,8 @@ class Script():
         # .communicate()输入标准输入，输出标准输出和标准出错
         chlid = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         res = chlid.communicate()
-        out = str(res[0], encoding="gbk")
-        err = str(res[1], encoding="gbk")
+        out = str(res[0], encoding="UTF-8")
+        err = str(res[1], encoding="UTF-8")
         if err != None and err != "":
             print(err)
             sys.exit(0)
@@ -58,8 +58,8 @@ class Script():
         # res[0] = open("C:\\Users\Administrator\\Desktop\\2018 10.txt",'r');
         # print (res[0])
 
-        out = str(res[0], encoding="utf-8")
-        err = str(res[1], encoding="utf-8")
+        out = str(res[0], encoding="UTF-8")
+        err = str(res[1], encoding="UTF-8")
         # os.remove(execPath)
         if err != "":
             for line in err.split():
