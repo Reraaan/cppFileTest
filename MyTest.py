@@ -1,19 +1,18 @@
-﻿#!/usr/bin/python3
+﻿#!/usr/bin/python3.6
 # -*- coding: UTF-8 -*-
 
 import HTMLTestRunner
 import unittest
 import os
 import subprocess
-import platform
 import sys
 
 
 class Script():
     def c_exe(cppfilePath, execPath):
         # execPath = currentpath + "/" + "printmonth.exe"
-        index = execPath.index(".")
-        execPath = execPath[0:index]
+        #index = execPath.index(".")
+        #execPath = execPath[0:index]
         # currentpath/test
         # 拼接需在命令行执行的命令
         command = "g++ " + cppfilePath + " -o " + execPath
@@ -25,19 +24,19 @@ class Script():
         # .communicate()输入标准输入，输出标准输出和标准出错
         chlid = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         res = chlid.communicate()
-        out = str(res[0], encoding="UTF-8")
-        err = str(res[1], encoding="UTF-8")
+        out = str(res[0], encoding="utf-8")
+        err = str(res[1], encoding="utf-8")
         if err != None and err != "":
             print(err)
             sys.exit(0)
-        print(out)
+        #print(out)
 
-        _system = platform.system()
-        if (_system == "Windows"):
-            execPath += ".exe"
+        #_system = platform.system()
+        #if (_system == "Windows"):
+            #execPath += ".exe"
 
-    def c_output(execPath, inputCase):
-        chlid = subprocess.Popen(execPath, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+    def c_output(Path, inputCase):
+        chlid = subprocess.Popen(Path, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
         chlid.stdin.write(bytes(inputCase, encoding="UTF-8"))
         # chlid.stdin.write(b"10")
@@ -58,8 +57,8 @@ class Script():
         # res[0] = open("C:\\Users\Administrator\\Desktop\\2018 10.txt",'r');
         # print (res[0])
 
-        out = str(res[0], encoding="UTF-8")
-        err = str(res[1])
+        out = str(res[0], encoding="utf-8")
+        err = str(res[1], encoding="utf-8")
         # os.remove(execPath)
         if err != "":
             for line in err.split():
@@ -91,16 +90,16 @@ class MyTest(unittest.TestCase):#继承unittest.TestCase
         self.currentpath = os.path.abspath('.')
         self.compileName = "printmonth.cpp"#get_compile(currentpath)
         self.commandName = "test.exe"#get_command(currentpath)
-        #self.cpp_caseName = "printmonth_case.cpp"
-        self.exec_caseName = "printmonth_case.exe"
+        self.cpp_caseName = "test.cpp"
+        self.exec_caseName = "printmonth_case1.exe"
 
         self.cppfilePath = self.currentpath + "/" + self.compileName
         self.execPath = self.currentpath + "/" + self.commandName
-        #self.cppcasePath = self.currentpath + "/" + self.cpp_caseName
+        self.cppcasePath = self.currentpath + "/" + self.cpp_caseName
         self.execcasePath = self.currentpath + "/" + self.exec_caseName
 
         Script.c_exe(self.cppfilePath,self.execPath)
-        #Script.c_exe(self.cppcasePath,self.execcasePath)
+        Script.c_exe(self.cppcasePath,self.execcasePath)
 
 
 
@@ -108,14 +107,15 @@ class MyTest(unittest.TestCase):#继承unittest.TestCase
     @classmethod
     def tearDownClass(self):
         #每个测试用例执行之后做操作
-        _system = platform.system()
+        os.remove(self.execPath)
+        os.remove(self.execcasePath)
+        """_system = platform.system()
         if (_system == "Windows"):
             os.remove(self.execPath)
         else:
             index = self.execPath.index(".")
             self.execPath = self.execPath[0:index]
-            os.remove(self.execPath)
-        #os.remove(self.execcasePath)
+            os.remove(self.execPath)"""
         
         
 
@@ -139,10 +139,12 @@ class MyTest(unittest.TestCase):#继承unittest.TestCase
         assertNotIn(a, b)     a not in b
         """
 
+
+
     def test_01(self):
         self.outputCase01 = Script.c_output(self.execPath,self.test_case01)
         #print(self.outputCase01)
-        self.expectCase01 = Script.c_output(self.execcasePath,self.test_case01)
+        #self.expectCase01 = Script.c_output(self.execcasePath,self.test_case01)
         self.assertEqual(self.outputCase01,self.expectCase01)
     
     def test_02(self):
@@ -166,14 +168,14 @@ class MyTest(unittest.TestCase):#继承unittest.TestCase
     def test_05(self):
         self.outputCase05 = Script.c_output(self.execPath,self.test_case05)
         #print(self.outputCase05)
-        self.expectCase05 = Script.c_output(self.execcasePath,self.test_case05)
+        #self.expectCase05 = Script.c_output(self.execcasePath,self.test_case05)
         self.assertEqual(self.outputCase05,self.expectCase05)
 
 if __name__ == '__main__':
     test_suite = unittest.TestSuite()#创建一个测试集合
     #test_suite.addTest(MyTest('test_01'))#测试套件中添加测试用例
     test_suite.addTest(unittest.makeSuite(MyTest))#使用makeSuite方法添加所有的测试方法
-    with open(os.path.abspath('.')+'/report/res.html','wb') as f:#打开一个保存结果的html文件
+    with open(os.path.abspath('.')+'/report/index.html','wb') as f:#打开一个保存结果的html文件
         runner = HTMLTestRunner.HTMLTestRunner(stream=f,title='cpp单文件测试',description='测试情况')
         #生成执行用例的对象
         runner.run(test_suite)
