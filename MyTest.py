@@ -59,7 +59,7 @@ class Script():
         # print (res[0])
 
         out = str(res[0], encoding="UTF-8")
-        err = str(res[1], encoding="UTF-8")
+        err = str(res[1])
         # os.remove(execPath)
         if err != "":
             for line in err.split():
