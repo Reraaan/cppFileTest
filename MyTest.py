@@ -160,7 +160,7 @@ class MyTest(unittest.TestCase):#继承unittest.TestCase
     def test_04(self):
         self.outputCase04 = Script.c_output(self.execPath,self.test_case04)
         #print(self.outputCase04)
-        self.expectCase04 = Script.c_output(self.execcasePath,self.test_case04)
+        #self.expectCase04 = Script.c_output(self.execcasePath,self.test_case04)
         self.assertEqual(self.outputCase04,self.expectCase04)
 
     def test_05(self):
