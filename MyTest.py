@@ -176,9 +176,11 @@ if __name__ == '__main__':
     #test_suite.addTest(MyTest('test_01'))#测试套件中添加测试用例
     test_suite.addTest(unittest.makeSuite(MyTest))#使用makeSuite方法添加所有的测试方法
     with open(os.path.abspath('.')+'/report/index.html','wb') as f:#打开一个保存结果的html文件
-        runner = HTMLTestRunner.HTMLTestRunner(stream=f,title='cpp单文件测试',description='测试情况')
+        runner = HTMLTestRunner.HTMLTestRunner(stream=f,title='cpp单文件测试',description='测试情况',verbosity=5)
         #生成执行用例的对象
-        runner.run(test_suite)
+        result = runner.run(test_suite)
+        print(result.failure_count)
+        sys.exit(result.failure_count)
         #执行测试套件
 
 
